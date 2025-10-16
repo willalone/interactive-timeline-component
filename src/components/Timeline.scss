@@ -1,3 +1,4 @@
+/* Основная область таймлайна */
 .timeline-component {
   position: relative;
   min-height: 100vh;
@@ -15,7 +16,7 @@
   font-family: 'PT Sans', sans-serif;
 }
 
-// Сетка как часть дизайна
+/* Вертикальные направляющие (десктоп) */
 .vertical-lines {
   position: absolute;
   inset: 0;
@@ -47,8 +48,7 @@
   }
 }
 
-/* Абсолютный оверлей градиентной полоски, который копирует размеры/позицию .title-gradient
-   и гарантированно находится поверх боковой линии */
+/* Оверлей градиента заголовка — синхронизируется с .title-gradient */
 .title-gradient-overlay {
   position: absolute;
   left: 0;
@@ -71,20 +71,23 @@
   min-height: 100vh;
 
   @media (max-width: 768px) {
-    padding: 60px 80px;
+    padding: 40px 40px;
+    padding-bottom: 140px;
+    max-width: 92%; /* сузим контейнер для бóльших внешних полей */
   }
   
   @media (max-width: 480px) {
-    padding: 40px 20px;
+    padding: 40px 35px;
+    max-width: 90%;
   }
   
   @media (max-width: 360px) {
-    padding: 30px 16px;
+    padding: 30px 35px;
+    max-width: 88%;
   }
 }
 
-/* расширяем существующие перекрестные линии круга за пределы окружности,
-   но в пределах боковых направляющих */
+/* Перекрестные линии круга в пределах направляющих */
 .years-section .year-container .year-separator .separator-circle {
   position: relative;
   --circle-radius: 265px; 
@@ -98,7 +101,7 @@
   z-index: 0;
 }
 
-/* горизонтальная линия: тянется от левой направляющей до правой */
+/* Горизонтальная линия через центр круга */
 .years-section .year-container .year-separator .separator-circle::before {
   left: calc(var(--side-offset, 60px) - (var(--circle-center-x, 0px) - var(--circle-radius, 265px)));
   width: calc(var(--container-width, 0px) - (2 * var(--side-offset, 60px)));
@@ -107,7 +110,7 @@
   transform: translateY(-0.5px);
 }
 
-/* вертикальная линия: ограничена боковыми направляющими по X */
+/* Вертикальная линия через центр круга */
 .years-section .year-container .year-separator .separator-circle::after {
   top: calc(-50vh);
   bottom: calc(-50vh);
@@ -116,7 +119,7 @@
   transform: translateX(-0.5px);
 }
 
-// Заголовок
+/* Заголовок */
 .timeline-header {
   margin-bottom: 30px;
   display: flex;
@@ -160,14 +163,17 @@
 
     @media (max-width: 768px) {
       font-size: 34px;
+      margin-left: 25px;
     }
     
     @media (max-width: 480px) {
       font-size: 28px;
+      margin-left: 23px;
     }
     
     @media (max-width: 360px) {
       font-size: 24px;
+      margin-left: 21px;
     }
   }
 
@@ -224,9 +230,10 @@
     
     @media (max-width: 768px) {
       flex-direction: row;
-      gap: 40px;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between; 
+      gap: 16px;
+      width: 100%;
     }
 
     .year {
@@ -246,7 +253,12 @@
         @media (max-width: 768px) {
           margin-right: 0;
           margin-bottom: 0;
-          font-size: 90px;
+          font-size: clamp(44px, 20vw, 90px);
+          line-height: 1;
+          flex: 1 1 50%;
+          max-width: 50%;
+          text-align: left;
+          white-space: nowrap;
         }
       }
 
@@ -258,12 +270,16 @@
         @media (max-width: 768px) {
           margin-left: 0;
           margin-top: 0;
-          font-size: 90px;
+          font-size: clamp(44px, 20vw, 90px);
+          line-height: 1;
+          flex: 1 1 50%;
+          max-width: 50%;
+          text-align: right;
+          white-space: nowrap;
         }
       }
 
       @media (max-width: 768px) {
-        font-size: 56px;
         line-height: 1;
       }
       
@@ -342,10 +358,6 @@
           }
 
           // перекрестие
-          .crosshair { position: absolute; background: #D6DBE3; z-index: 0; }
-          .crosshair-v { width: 1px; height: 100%; left: 50%; top: 0; transform: translateX(-50%); }
-          .crosshair-h { height: 1px; width: 100%; top: 50%; left: 0; transform: translateY(-50%); }
-
           .crosshair { position: absolute; background: #D6DBE3; z-index: 0; }
           .crosshair-v { width: 1px; height: 100%; left: 50%; top: 0; transform: translateX(-50%); }
           .crosshair-h { height: 1px; width: 100%; top: 50%; left: 0; transform: translateY(-50%); }
@@ -608,7 +620,7 @@
       margin-bottom: 30px;
       
       @media (max-width: 768px) {
-        margin-bottom: 80px; /* Отступ для фиксированной навигации */
+        margin-bottom: 150px; 
         
         .swiper-wrapper {
           align-items: flex-start;
@@ -766,12 +778,13 @@
       transition: color 0.3s ease;
       
           @media (max-width: 768px) {
-            font-size: 35px !important;
+            font-size: 20px !important; /* читабельно и не ломает верстку */
             color: #333 !important;
-            line-height: 1.4 !important;
+            line-height: 1.5 !important;
             padding: 0 !important;
-            max-width: 343px !important;
+            max-width: 100% !important;
             word-wrap: break-word !important;
+            overflow-wrap: anywhere !important;
             hyphens: auto !important;
             -webkit-hyphens: auto !important;
             -ms-hyphens: auto !important;
@@ -839,7 +852,7 @@
           
           @media (max-width: 768px) {
             margin-left: 8px;
-            margin-top: -100px;
+            margin-top: 0;
           }
         }
 

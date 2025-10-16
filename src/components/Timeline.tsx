@@ -1,19 +1,9 @@
-/**
- * Interactive Timeline Component
- * 
- * React компонент для отображения временных периодов с круговым интерфейсом.
- * Поддерживает 2-6 временных периодов с интерактивными точками на окружности.
- * 
- * @author Frontend Developer
- * @version 1.0.0
- */
-
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { TimelineProps } from '../types';
 import { useTimeline } from '../hooks/useTimeline';
 import './Timeline.scss';
 
-// Swiper для мобильного слайдера событий
+// Мобильный слайдер событий
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -88,7 +78,7 @@ const Timeline: React.FC<TimelineProps> = ({ periods, className = '' }) => {
   const [mobileEventIndex, setMobileEventIndex] = useState(0);
   
   const [activePeriodId, setActivePeriodId] = useState<number>(2);
-  // Начальное состояние: точка с ID 2 должна быть в середине первой четверти (300° или -60°)
+  // По умолчанию активен период 2; вычисляем угол для положения на окружности
   const [rotationAngle, setRotationAngle] = useState<number>(300 - ((2 - 1) * SLIDER_CONFIG.DEGREES_PER_POINT));
   const [displayStartYear, setDisplayStartYear] = useState<number>(1987);
   const [displayEndYear, setDisplayEndYear] = useState<number>(1991);
@@ -112,14 +102,7 @@ const Timeline: React.FC<TimelineProps> = ({ periods, className = '' }) => {
     PERIOD_EVENTS[activePeriodId as keyof typeof PERIOD_EVENTS] || [], [activePeriodId]
   );
 
-  /**
-   * Анимация счетчика чисел для плавного изменения годов
-   * @param from - начальное значение
-   * @param to - конечное значение
-   * @param duration - длительность анимации в мс
-   * @param onUpdate - колбэк для обновления значения
-   * @param onComplete - колбэк при завершении анимации
-   */
+  // Плавный счетчик для смены годов
   const animateCounter = useCallback((
     from: number,
     to: number,
@@ -188,7 +171,7 @@ const Timeline: React.FC<TimelineProps> = ({ periods, className = '' }) => {
     setMobileEventIndex(0);
   }, [activePeriod]);
 
-  // Позиционирование боковых направляющих линий
+  // Расчет позиций направляющих и центра круга
   useLayoutEffect(() => {
     const SIDE_ADJUST_PX = 100;
     
@@ -247,6 +230,7 @@ const Timeline: React.FC<TimelineProps> = ({ periods, className = '' }) => {
     };
   }, []);
 
+  // Границы горизонтального слайдера
   useLayoutEffect(() => {
     const calculateSliderBounds = () => {
       const viewportEl = viewportRef.current;
@@ -303,10 +287,12 @@ const Timeline: React.FC<TimelineProps> = ({ periods, className = '' }) => {
       }
     };
     
-    const handlePointerUp = () => {
+    const finishDrag = () => {
       container.releasePointerCapture(e.pointerId);
       container.removeEventListener('pointermove', handlePointerMove);
-      container.removeEventListener('pointerup', handlePointerUp);
+      container.removeEventListener('pointerup', finishDrag);
+      container.removeEventListener('pointercancel', finishDrag);
+      container.removeEventListener('pointerleave', finishDrag);
       
       if (!isDragging) {
         container.style.transition = 'none';
@@ -322,7 +308,9 @@ const Timeline: React.FC<TimelineProps> = ({ periods, className = '' }) => {
     
     container.setPointerCapture(e.pointerId);
     container.addEventListener('pointermove', handlePointerMove);
-    container.addEventListener('pointerup', handlePointerUp);
+    container.addEventListener('pointerup', finishDrag);
+    container.addEventListener('pointercancel', finishDrag);
+    container.addEventListener('pointerleave', finishDrag);
   }, [sliderOffset, maxSliderOffset]);
 
   const currentMobileEvent = currentEvents[mobileEventIndex];
