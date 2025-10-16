@@ -5,13 +5,13 @@ export const SLIDER_CONFIG = {
   ANIMATION_DURATION: 400,
   POINTS_COUNT: 6,
   DEGREES_PER_POINT: 60,
-  SCROLL_STEP: 343 + 32
+  SCROLL_STEP: 343 + 32,
 } as const;
 
 export const BREAKPOINTS = {
   MOBILE: 768,
   TABLET: 1024,
-  DESKTOP: 1200
+  DESKTOP: 1200,
 } as const;
 
 export const ANIMATION_SETTINGS = {
@@ -19,7 +19,7 @@ export const ANIMATION_SETTINGS = {
   NORMAL: 800,
   SLOW: 1200,
   FADE_IN: 1000,
-  PULSE: 600
+  PULSE: 600,
 } as const;
 
 export const CSS_VARIABLES = {
@@ -27,7 +27,7 @@ export const CSS_VARIABLES = {
   SECONDARY_COLOR: '--secondary-color',
   BACKGROUND_COLOR: '--background-color',
   TEXT_COLOR: '--text-color',
-  ACCENT_COLOR: '--accent-color'
+  ACCENT_COLOR: '--accent-color',
 } as const;
 
 export const ARIA_LABELS = {
@@ -37,5 +37,5 @@ export const ARIA_LABELS = {
   NEXT_EVENT: 'Следующее событие',
   SELECT_PERIOD: 'Выбрать период',
   GO_TO_EVENT: 'Перейти к событию',
-  SCROLL_SLIDER: 'Прокрутить слайдер'
+  SCROLL_SLIDER: 'Прокрутить слайдер',
 } as const;

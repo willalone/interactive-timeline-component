@@ -5,7 +5,8 @@ module.exports = {
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].[contenthash].js',
+    chunkFilename: '[name].[contenthash].chunk.js',
     clean: true,
     publicPath: process.env.NODE_ENV === 'production' ? '/interactive-timeline-component/' : '/',
   },
@@ -43,6 +44,28 @@ module.exports = {
       template: './src/index.html',
     }),
   ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+        gsap: {
+          test: /[\\/]node_modules[\\/]gsap[\\/]/,
+          name: 'gsap',
+          chunks: 'all',
+        },
+        swiper: {
+          test: /[\\/]node_modules[\\/]swiper[\\/]/,
+          name: 'swiper',
+          chunks: 'all',
+        },
+      },
+    },
+  },
   devServer: {
     static: {
       directory: path.join(__dirname, 'dist'),

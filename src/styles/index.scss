@@ -18,3 +18,12 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* Мобильная адаптация: занимать ровно высоту экрана и убрать вертикальный скролл */
+@media (max-width: 768px) {
+  html, body, #root {
+    height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
+  }
+}
